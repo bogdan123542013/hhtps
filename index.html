@@ -1,174 +1,457 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MegaBot — твой умный помощник</title>
+<meta name="theme-color" content="#080b18">
+<meta name="description" content="MegaBot — умный Telegram-бот с полезными возможностями.">
+<title>MegaBot — официальный сайт</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#030918;--panel:#08162c;--line:#153b69;--blue:#078cff;--cyan:#00e5ff;--text:#f4f7ff;--muted:#a5b9db}
-body{font-family:Arial,sans-serif;background:radial-gradient(ellipse at top,#10285b 0%,var(--bg) 55%);color:var(--text);min-height:100vh}
-button,a{font:inherit}
-button{cursor:pointer}
-header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;border-bottom:1px solid var(--line);background:#030918dd;position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
-.logo{font-size:27px;font-weight:900;color:white;text-decoration:none}
-.logo span{color:var(--cyan)}
-nav{display:flex;gap:24px}
-nav a{color:var(--muted);text-decoration:none;font-size:14px}
-nav a:hover{color:var(--cyan)}
-.btn{border:1px solid var(--line);background:#0b1c37;color:white;padding:12px 18px;border-radius:12px;transition:.2s}
-.btn:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 0 18px #078cff55}
-.primary{background:linear-gradient(110deg,#008cff,#514bff);border:0;font-weight:bold}
-.layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:22px;max-width:1500px;margin:auto;padding:24px}
-aside{background:#061126;border:1px solid var(--line);border-radius:16px;padding:15px;height:max-content;position:sticky;top:90px}
-.menu-title{font-size:11px;color:var(--muted);margin:15px 8px 8px}
-.menu{display:flex;flex-direction:column;gap:7px}
-.menu button{width:100%;text-align:left;background:transparent;border:1px solid transparent;color:#c8d9f7;padding:12px;border-radius:10px}
-.menu button:hover,.menu button.active{background:linear-gradient(100deg,#087dff55,#503cff44);border-color:#245bba;color:white}
-.vip{margin-top:20px;padding:17px;border-radius:13px;text-align:center;background:linear-gradient(140deg,#27145d,#071d44);border:1px solid #5140bd}
-.vip h3{color:#e2b5ff;margin-bottom:8px}
-main{min-width:0}
-.hero{display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:18px;padding:38px;background:linear-gradient(125deg,#09152e,#101b53 65%,#28115a);border:1px solid #234e9c;border-radius:20px;overflow:hidden;position:relative}
-.hero:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:#007bff55;filter:blur(65px);right:10%;top:10px}
-.hero-content,.robot{position:relative;z-index:1}
-.eyebrow{color:var(--cyan);font-size:13px;letter-spacing:2px;margin-bottom:15px}
-h1{font-size:clamp(30px,4vw,51px);line-height:1.12;margin-bottom:18px}
-.gradient{background:linear-gradient(90deg,#00d9ff,#9c77ff);background-clip:text;-webkit-background-clip:text;color:transparent}
-.hero p{color:#c3d2f1;line-height:1.7;max-width:560px}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-.robot{text-align:center;font-size:clamp(95px,15vw,165px);filter:drop-shadow(0 0 30px #078cff);animation:float 4s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-12px)}}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin:30px 0 17px;gap:10px}
-.section-head h2{font-size:24px}
-.section-head p{font-size:13px;color:var(--muted);margin-top:6px}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.card{background:linear-gradient(145deg,#0a1931,#061126);border:1px solid var(--line);border-radius:15px;padding:20px;min-height:145px;transition:.25s;cursor:pointer}
-.card:hover{transform:translateY(-4px);border-color:#168cff;box-shadow:0 10px 35px #007bff1c}
-.card .emoji{font-size:28px;margin-bottom:13px}
-.card h3{font-size:16px;margin-bottom:9px}
-.card p{font-size:13px;line-height:1.55;color:var(--muted)}
-.status{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;padding:22px;border:1px solid var(--line);background:#07152c;border-radius:15px}
-.status span{color:#00e5a0}
-footer{text-align:center;color:#8198bf;padding:25px;border-top:1px solid var(--line);font-size:13px;margin-top:20px}
-#notice{position:fixed;bottom:22px;right:22px;z-index:20;background:#102749;border:1px solid var(--cyan);padding:15px 20px;border-radius:12px;max-width:320px;box-shadow:0 0 25px #008cff44;display:none}
-#notice.show{display:block;animation:pop .2s ease}
-@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-#mobileMenu{display:none}
-@media(max-width:1000px){nav{gap:12px}.layout{grid-template-columns:170px 1fr;padding:14px;gap:14px}.hero{padding:25px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){header{height:auto;min-height:65px;flex-wrap:wrap;padding:15px;gap:12px}nav{order:3;width:100%;overflow-x:auto;padding:8px 0}header>.btn{padding:9px;font-size:12px}.layout{display:block;padding:12px}aside{position:static;margin-bottom:15px}.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.menu-title{margin-top:12px}.vip{display:none}.hero{grid-template-columns:1fr;padding:25px}.robot{font-size:90px}.cards{grid-template-columns:1fr}.section-head h2{font-size:20px}.status{align-items:flex-start;flex-direction:column}}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #080b18;
+    --panel: #11172b;
+    --purple: #8b5cf6;
+    --blue: #38bdf8;
+    --text: #f5f7ff;
+    --muted: #a5b0cc;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at top left, #21134c 0%, transparent 45%),
+        radial-gradient(ellipse at bottom right, #102d53 0%, transparent 40%),
+        var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(8, 11, 24, 0.88);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #ffffff12;
+}
+
+nav {
+    max-width: 1150px;
+    margin: auto;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #a78bfa, #38bdf8);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.nav-links a {
+    color: var(--muted);
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 13px;
+    padding: 14px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 35px #8b5cf644;
+}
+
+.primary {
+    color: white;
+    background: linear-gradient(100deg, #7c3aed, #2563eb);
+}
+
+.secondary {
+    background: #ffffff0a;
+    border: 1px solid #ffffff20;
+    color: white;
+}
+
+.hero {
+    max-width: 1050px;
+    min-height: 570px;
+    margin: auto;
+    padding: 100px 24px 75px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.tag {
+    display: inline-block;
+    border: 1px solid #8b5cf655;
+    background: #8b5cf61b;
+    color: #c4b5fd;
+    padding: 9px 15px;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    font-size: 13px;
+}
+
+h1 {
+    font-size: clamp(44px, 8vw, 78px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -2px;
+}
+
+.gradient {
+    background: linear-gradient(90deg, #a78bfa, #38bdf8);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    max-width: 650px;
+    font-size: 18px;
+    line-height: 1.8;
+    margin: 25px 0 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.orb {
+    width: 95px;
+    height: 95px;
+    margin-bottom: 30px;
+    display: grid;
+    place-items: center;
+    font-size: 43px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #8b5cf6, #2563eb);
+    box-shadow: 0 0 65px #7c3aed55;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+section {
+    max-width: 1150px;
+    margin: auto;
+    padding: 75px 22px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: clamp(30px, 5vw, 43px);
+    margin-bottom: 15px;
+}
+
+.section-description {
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto 40px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    padding: 27px;
+    background: linear-gradient(145deg, #151b32, #0d1122);
+    border: 1px solid #ffffff12;
+    border-radius: 22px;
+    transition: 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #8b5cf677;
+}
+
+.card-icon {
+    font-size: 31px;
+    margin-bottom: 18px;
+}
+
+.card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.cta {
+    text-align: center;
+    background: linear-gradient(135deg, #171333, #101c35);
+    border: 1px solid #ffffff15;
+    border-radius: 28px;
+    padding: 55px 22px;
+}
+
+.cta p {
+    color: var(--muted);
+    margin: 18px auto 25px;
+    line-height: 1.7;
+}
+
+footer {
+    padding: 30px 20px;
+    border-top: 1px solid #ffffff12;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 2;
+}
+
+footer a {
+    color: #c4b5fd;
+}
+
+@media (max-width: 750px) {
+    .nav-links {
+        gap: 12px;
+        font-size: 13px;
+    }
+
+    .nav-links .nav-telegram {
+        display: none;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        min-height: 500px;
+        padding-top: 75px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    section {
+        padding-top: 55px;
+        padding-bottom: 55px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <a href="#" class="logo">🤖 Mega<span>Bot</span></a>
-  <nav>
-    <a href="#home">Главная</a>
-    <a href="#features">Возможности</a>
-    <a href="#about">О проекте</a>
-    <a href="#contacts">Контакты</a>
-  </nav>
-  <button class="btn primary" onclick="subscribe()">✈ Подписаться на бота</button>
+    <nav>
+        <a href="#home" class="logo">✦ MegaBot</a>
+
+        <div class="nav-links">
+            <a href="#home">Главная</a>
+            <a href="#features">Возможности</a>
+            <a href="#about">О проекте</a>
+            <a class="button primary nav-telegram"
+               href="https://t.me/"
+               target="_blank"
+               rel="noopener noreferrer">Telegram ↗</a>
+        </div>
+    </nav>
 </header>
 
-<div class="layout">
-  <aside>
-    <div class="menu-title">ГЛАВНОЕ МЕНЮ</div>
-    <div class="menu" id="mainMenu">
-      <button class="active" onclick="showPage('Главная',this)">🏠 Главная</button>
-      <button onclick="showPage('Профиль',this)">👤 Профиль</button>
-      <button onclick="showPage('Баланс',this)">💳 Баланс</button>
-      <button onclick="showPage('Магазин',this)">🛍️ Магазин</button>
-      <button onclick="showPage('Задания',this)">✅ Задания</button>
-      <button onclick="showPage('Новости',this)">📰 Новости</button>
-      <button onclick="showPage('Топ пользователей',this)">🏆 Рейтинг</button>
-      <button onclick="showPage('Настройки',this)">⚙️ Настройки</button>
-    </div>
-    <div class="menu-title">ДОПОЛНИТЕЛЬНО</div>
-    <div class="menu">
-      <button onclick="showPage('Админ-панель',this)">🛡️ Админ-панель</button>
-      <button onclick="showPage('VIP-зона',this)">👑 VIP-зона</button>
-      <button onclick="showPage('Рассылка',this)">📣 Рассылка</button>
-      <button onclick="showPage('Статистика',this)">📊 Статистика</button>
-      <button onclick="showPage('Поддержка',this)">🎧 Поддержка</button>
-    </div>
-    <div class="vip"><h3>👑 VIP ZONE</h3><p style="font-size:13px;margin:10px 0;color:#c9c5ff">Больше возможностей</p><button class="btn primary" onclick="showPage('VIP-зона')">Подробнее</button></div>
-  </aside>
+<main>
+    <div class="hero" id="home">
+        <div class="orb">✦</div>
 
-  <main id="home">
-    <section class="hero">
-      <div class="hero-content">
-        <div class="eyebrow">✦ ТВОЙ ЦИФРОВОЙ МИР ✦</div>
-        <h1>MegaBot — твой<br><span class="gradient">умный помощник!</span></h1>
-        <p>Полезные возможности, удобные инструменты и современные технологии — всё в одном месте. Открой для себя мир MegaBot!</p>
-        <div class="actions">
-          <button class="btn primary" onclick="subscribe()">✈ Подписаться на бота</button>
-          <button class="btn" onclick="document.querySelector('#features').scrollIntoView({behavior:'smooth'})">Узнать больше ↓</button>
+        <div class="tag">⚡ ТВОЙ ЦИФРОВОЙ ПОМОЩНИК</div>
+
+        <h1>
+            Добро пожаловать<br>
+            в <span class="gradient">MegaBot</span>
+        </h1>
+
+        <p>
+            Современный Telegram-бот с удобным интерфейсом,
+            полезными функциями и простым доступом.
+            Открой для себя новые возможности!
+        </p>
+
+        <div class="hero-buttons">
+            <a class="button primary"
+               href="https://t.me/"
+               target="_blank"
+               rel="noopener noreferrer">
+                ✈ Открыть Telegram
+            </a>
+
+            <a class="button secondary" href="#features">
+                Узнать возможности ↓
+            </a>
         </div>
-      </div>
-      <div class="robot">🤖</div>
-    </section>
-
-    <div class="section-head" id="features">
-      <div><h2>Основные возможности</h2><p>Всё, что нужно — в одном месте</p></div>
-      <span style="color:var(--cyan);font-size:13px">MEGABOT v1.0</span>
     </div>
-    <section class="cards">
-      <article class="card" onclick="showPage('Профиль')"><div class="emoji">👤</div><h3>Личный кабинет</h3><p>Твой профиль и персональные настройки.</p></article>
-      <article class="card" onclick="showPage('Магазин')"><div class="emoji">🛒</div><h3>Магазин</h3><p>Каталог возможностей и услуг проекта.</p></article>
-      <article class="card" onclick="showPage('Задания')"><div class="emoji">✅</div><h3>Задания</h3><p>Список задач и достижений.</p></article>
-      <article class="card" onclick="showPage('Новости')"><div class="emoji">📰</div><h3>Новости</h3><p>Новости, обновления и события.</p></article>
-      <article class="card" onclick="showPage('Топ пользователей')"><div class="emoji">🏆</div><h3>Топ пользователей</h3><p>Рейтинг участников сообщества.</p></article>
-      <article class="card" onclick="showPage('Админ-панель')"><div class="emoji">🛡️</div><h3>Админ-панель</h3><p>Раздел управления проектом.</p></article>
-      <article class="card" onclick="showPage('VIP-зона')"><div class="emoji">👑</div><h3>VIP-зона</h3><p>Отдельный раздел дополнительных функций.</p></article>
-      <article class="card" onclick="showPage('Рассылка')"><div class="emoji">📣</div><h3>Рассылка</h3><p>Инструменты публикации сообщений.</p></article>
-      <article class="card" onclick="showPage('Статистика')"><div class="emoji">📊</div><h3>Статистика</h3><p>Обзор показателей проекта.</p></article>
-      <article class="card" onclick="showPage('Баланс')"><div class="emoji">💳</div><h3>Баланс</h3><p>Раздел информации о балансе.</p></article>
-      <article class="card" onclick="showPage('Поддержка')"><div class="emoji">🎧</div><h3>Поддержка</h3><p>Помощь и ответы на вопросы.</p></article>
-      <article class="card" onclick="showPage('Настройки')"><div class="emoji">⚙️</div><h3>Настройки</h3><p>Персонализация интерфейса.</p></article>
+
+    <section id="features">
+        <h2 class="section-title">
+            Возможности <span class="gradient">MegaBot</span>
+        </h2>
+
+        <p class="section-description">
+            Всё необходимое в одном месте.
+            Изучай возможности проекта прямо на сайте.
+        </p>
+
+        <div class="cards">
+            <article class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Быстрая работа</h3>
+                <p>
+                    Удобный интерфейс и быстрый доступ
+                    к основным функциям бота.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">🤖</div>
+                <h3>Умный помощник</h3>
+                <p>
+                    Помощь с повседневными задачами
+                    и удобное взаимодействие с ботом.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">🛡️</div>
+                <h3>Удобная система</h3>
+                <p>
+                    Понятная навигация, организованные
+                    разделы и простой доступ к информации.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">👑</div>
+                <h3>VIP-возможности</h3>
+                <p>
+                    Раздел для описания дополнительных
+                    возможностей проекта, если они доступны.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">⚙️</div>
+                <h3>Управление</h3>
+                <p>
+                    Информация об инструментах управления
+                    и административных функциях бота.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">💬</div>
+                <h3>Поддержка</h3>
+                <p>
+                    Возможность связаться с разработчиком
+                    через Telegram.
+                </p>
+            </article>
+        </div>
     </section>
 
-    <section class="status" id="about">
-      <div><h3>🚀 Присоединяйся к MegaBot!</h3><p style="color:var(--muted);margin-top:7px;font-size:14px">Открой новые возможности уже сегодня.</p></div>
-      <button class="btn primary" onclick="subscribe()">Подписаться ↗</button>
+    <section id="about">
+        <div class="cta">
+            <h2 class="section-title">
+                Попробуй <span class="gradient">MegaBot</span>
+            </h2>
+
+            <p>
+                Присоединяйся к проекту и изучай его
+                возможности в Telegram.
+            </p>
+
+            <a class="button primary"
+               href="https://t.me/"
+               target="_blank"
+               rel="noopener noreferrer">
+                Перейти в Telegram ↗
+            </a>
+        </div>
     </section>
-    <footer id="contacts">© 2026 MegaBot · Твой цифровой помощник · <a href="https://github.com/" style="color:var(--cyan)">GitHub</a></footer>
-  </main>
-</div>
-<div id="notice" role="status"></div>
+</main>
+
+<footer>
+    <div class="logo">✦ MegaBot</div>
+    <p>Современный проект для Telegram</p>
+    <p>© <span id="year"></span> MegaBot. Все права защищены.</p>
+</footer>
 
 <script>
-const notice=document.getElementById('notice');
-let noticeTimer;
-function showNotice(message){
-  notice.textContent=message;
-  notice.classList.add('show');
-  clearTimeout(noticeTimer);
-  noticeTimer=setTimeout(()=>notice.classList.remove('show'),3000);
-}
-function showPage(page,button){
-  document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
-  if(button)button.classList.add('active');
-  const messages={
-    'Главная':'Добро пожаловать на главную страницу MegaBot!',
-    'Профиль':'Раздел профиля. Подключение аккаунта появится после настройки сервера.',
-    'Баланс':'Баланс пока демонстрационный. Реальные платежи не подключены.',
-    'Магазин':'Магазин пока демонстрационный. Покупки не выполняются.',
-    'Задания':'Здесь можно будет разместить задания и достижения.',
-    'Новости':'Здесь будут отображаться новости проекта.',
-    'Топ пользователей':'Рейтинг появится после подключения базы данных.',
-    'Настройки':'Настройки проекта. Дополнительные параметры будут добавлены позже.',
-    'Админ-панель':'Демонстрационный раздел. Реальное управление требует авторизации на сервере.',
-    'VIP-зона':'VIP-раздел. Условия и функции можно настроить отдельно.',
-    'Рассылка':'Рассылка пока не подключена к Telegram API.',
-    'Статистика':'Реальная статистика появится после подключения серверной части.',
-    'Поддержка':'Свяжись с поддержкой через Telegram после настройки ссылки.'
-  };
-  showNotice(messages[page]||page);
-}
-function subscribe(){
-  showNotice('Добавь ссылку на своего Telegram-бота в код сайта, чтобы подключить эту кнопку.');
-}
+document.getElementById("year").textContent =
+    new Date().getFullYear();
 </script>
+
 </body>
 </html>
